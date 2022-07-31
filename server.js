@@ -6,9 +6,7 @@ const app = express();
 const uuid = require('uuid');
 dotEnv.config();
 
-const { tasks, users } = require('./constants')
-
-
+const resolvers = require('./resolvers/index');
 
 const typeDefs = gql`
     type Query {
@@ -43,32 +41,6 @@ const typeDefs = gql`
         user: User!
     }
 `
-const resolvers = {
-    Query: {
-        greetings: () => "Hello",
-        tasks: () => tasks,
-        task: (parent, args) => tasks.find(task => task.id === args.id),
-        users: () => users,
-        user: (parent, args) => users.find(user => user.id === args.id)
-    },
-    Mutation: {
-        createTask: (parent, args) => {
-            let { input } = args;
-            console.log('v4 =>', uuid.v4());
-            let task = {...input, id: uuid.v4()}
-            console.log('task =>', task);
-            tasks.push(task);
-            return task;
-        }
-    },
-    Task: {
-        user: (parent) => users.find(user => user.id === parent.userId)
-    },
-    User: {
-        tasks: (parent) => tasks.filter(task => task.userId === parent.id)
-    }
-};
-
 async function startApolloServer (typeDefs, resolvers) {
     const apolloServer = new ApolloServer({
         typeDefs,
@@ -100,8 +72,3 @@ async function startApolloServer (typeDefs, resolvers) {
 }
 
 startApolloServer(typeDefs, resolvers);
-
-
-
-
-
