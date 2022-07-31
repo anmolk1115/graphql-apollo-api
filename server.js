@@ -8,40 +8,6 @@ dotEnv.config();
 const typeDefs = require('./typeDefs/index');
 const resolvers = require('./resolvers/index');
 
-// const typeDefs = gql`
-//     type Query {
-//         greetings: String
-//         tasks: [Task]
-//         task(id: ID!): Task
-//         users: [User!]
-//         user(id: ID!): User
-//     }
-
-//     type Mutation {
-//         createTask(input: createTaskInput!): Task
-//     }
-
-//     input createTaskInput {
-//         name: String!
-//         completed: Boolean!
-//         id: ID!
-//     }
-
-//     type User {
-//         id: ID!
-//         name: String!
-//         email: String!
-//         tasks: [Task!]
-//     }
-
-//     type Task {
-//         id: ID!
-//         name: String!
-//         completed: Boolean!
-//         user: User!
-//     }
-// `
-
 async function startApolloServer (typeDefs, resolvers) {
     const apolloServer = new ApolloServer({
         typeDefs,
