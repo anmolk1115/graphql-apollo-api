@@ -13,6 +13,7 @@ const typeDefs = gql`
     type Query {
         greetings: String
         tasks: [Task]
+        task(id: ID!): Task
     }
 
     type User {
@@ -32,7 +33,8 @@ const typeDefs = gql`
 const resolvers = {
     Query: {
         greetings: () => "Hello",
-        tasks: () => tasks
+        tasks: () => tasks,
+        task: (parent, args) => tasks.find(task => task.id === args.id) 
     },
     Task: {
         user: (parent) => {
@@ -53,7 +55,7 @@ async function startApolloServer (typeDefs, resolvers) {
 
     await apolloServer.start()
 
-    // app.use(cors());
+    app.use(cors());
     app.use(express.json());
     
     apolloServer.applyMiddleware({
@@ -75,7 +77,7 @@ async function startApolloServer (typeDefs, resolvers) {
     })
 }
 
-startApolloServer(typeDefs, resolvers);``
+startApolloServer(typeDefs, resolvers);
 
 
 
