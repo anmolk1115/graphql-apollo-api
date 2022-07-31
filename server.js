@@ -3,6 +3,7 @@ const { ApolloServer, gql } = require('apollo-server-express')
 const dotEnv = require('dotenv');
 const cors = require('cors');
 const app = express();
+const uuid = require('uuid');
 dotEnv.config();
 
 const { tasks, users } = require('./constants')
@@ -16,6 +17,16 @@ const typeDefs = gql`
         task(id: ID!): Task
         users: [User!]
         user(id: ID!): User
+    }
+
+    type Mutation {
+        createTask(input: createTaskInput!): Task
+    }
+
+    input createTaskInput {
+        name: String!
+        completed: Boolean!
+        id: ID!
     }
 
     type User {
@@ -39,6 +50,16 @@ const resolvers = {
         task: (parent, args) => tasks.find(task => task.id === args.id),
         users: () => users,
         user: (parent, args) => users.find(user => user.id === args.id)
+    },
+    Mutation: {
+        createTask: (parent, args) => {
+            let { input } = args;
+            console.log('v4 =>', uuid.v4());
+            let task = {...input, id: uuid.v4()}
+            console.log('task =>', task);
+            tasks.push(task);
+            return task;
+        }
     },
     Task: {
         user: (parent) => users.find(user => user.id === parent.userId)
