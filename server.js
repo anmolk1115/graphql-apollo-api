@@ -7,6 +7,9 @@ const uuid = require('uuid');
 dotEnv.config();
 const typeDefs = require('./typeDefs/index');
 const resolvers = require('./resolvers/index');
+const {connection} = require('./database/util/index');
+
+connection();
 
 async function startApolloServer (typeDefs, resolvers) {
     const apolloServer = new ApolloServer({
