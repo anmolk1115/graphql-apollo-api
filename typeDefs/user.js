@@ -23,6 +23,8 @@ module.exports = gql`
         email: String!
         password: String!
         tasks: [Task!]
+        createdAt: Date!
+        updatedAt: Date!
     }
 
 `

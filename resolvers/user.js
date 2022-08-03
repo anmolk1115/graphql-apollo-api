@@ -23,6 +23,7 @@ module.exports = {
                 return result;
             } catch(e) {
                 console.log('Error =>', e);
+                throw e;
             }
         }
     },
