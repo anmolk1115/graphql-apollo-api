@@ -12,14 +12,18 @@ module.exports = {
     Mutation: {
         signup: async(parent, { input }, context, info) => {
             const { email, password } = input;
-            const user = await User.findOne({email})
-            if(user) {
-                throw new Error('User already exists');
+            try {
+                const user = await User.findOne({email})
+                if(user) {
+                    throw new Error('User already exists');
+                }
+                const hashedPassword = await bcrypt.hash(password, 12);
+                const newUser = new User({...input, password: hashedPassword});
+                const result = await newUser.save();
+                return result;
+            } catch(e) {
+                console.log('Error =>', e);
             }
-            const hashedPassword = await bcrypt.hash(password, 12);
-            const newUser = new User({...input, password: hashedPassword});
-            const result = await newUser.save();
-            return result;
         }
     },
     User: {
