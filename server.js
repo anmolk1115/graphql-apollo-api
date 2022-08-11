@@ -8,13 +8,24 @@ dotEnv.config();
 const typeDefs = require('./typeDefs/index');
 const resolvers = require('./resolvers/index');
 const {connection} = require('./database/util/index');
-
+const { verifyUser } = require('./helper/context/index');
 connection();
+
+let flag = false;
 
 async function startApolloServer (typeDefs, resolvers) {
     const apolloServer = new ApolloServer({
         typeDefs,
-        resolvers
+        resolvers,
+        // context: (obj) => {
+        //     if(!flag) {
+        //         flag = true;
+        //         console.log('request =>', obj);
+        //     } 
+        // }
+        // context: ({req}) => {
+        //     verifyUser(req);
+        // }
     })
 
     await apolloServer.start()
